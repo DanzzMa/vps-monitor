@@ -1,18 +1,31 @@
 # VPS Monitor
 
-Dashboard Node.js tanpa dependency. Monitor CPU, RAM, disk, load, uptime, latency, network speed, online/offline. Alert Discord webhook.
+Dashboard satu proses. Tidak perlu agent, database, atau dependency.
 
-## Dashboard
 ```bash
+git clone https://github.com/DanzzMa/vps-monitor.git
+cd vps-monitor
 cp .env.example .env
-# isi MONITOR_TOKEN + DISCORD_WEBHOOK_URL opsional
+nano .env
 node server.js
-# buka http://IP:3088
 ```
 
-## Agent tiap VPS
+Buka `http://IP-VPS:3088`.
+
+`.env`:
+
+```env
+PORT=3088
+NODE_NAME=MONITORING-NODE-SGP
+MONITOR_TOKEN=change-this-long-token
+DISCORD_WEBHOOK_URL=
+ALERT_CPU=90
+ALERT_RAM=90
+ALERT_DISK=90
+```
+
+Update:
+
 ```bash
-MONITOR_URL=http://DASHBOARD_IP:3088 MONITOR_TOKEN=TOKEN NODE_NAME=MONITORING-NODE-SGP node agent/agent.js
+git pull
 ```
-
-Agent hanya memakai Node.js 18+ bawaan. Untuk service permanen, gunakan systemd/PM2. Jangan expose port tanpa firewall/reverse proxy; gunakan token panjang + HTTPS tunnel/Nginx.

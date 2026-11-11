@@ -1,1 +1,1 @@
-const test=require('node:test'),assert=require('node:assert/strict');test('payload contract',()=>{const n={name:'x',cpu:1,ram:2,disk:3};assert.equal(typeof n.cpu,'number');assert.ok(n.name)})
+const test=require('node:test'),assert=require('node:assert/strict');test('single-process metric contract',()=>{const m={name:'node',cpu:1,ram:2,disk:3,load:[0,0,0],uptime:1};assert.ok(m.name);assert.equal(typeof m.cpu,'number')})
