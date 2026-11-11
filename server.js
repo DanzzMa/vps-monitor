@@ -1,5 +1,7 @@
 const http=require('http'),fs=require('fs'),path=require('path'),os=require('os'),{execFileSync}=require('child_process');
+try{for(const line of fs.readFileSync(path.join(__dirname,'.env'),'utf8').split(/\r?\n/)){const m=line.match(/^\s*([A-Za-z_][\w]*)\s*=\s*(.*)\s*$/);if(m&&!process.env[m[1]])process.env[m[1]]=m[2].replace(/^['"]|['"]$/g,'')}}catch{}
 const PORT=Number(process.env.PORT||3088),node={name:process.env.NODE_NAME||os.hostname()};
+if(!process.env.DISCORD_WEBHOOK_URL)console.warn('DISCORD_WEBHOOK_URL belum diatur; laporan Discord nonaktif');
 function disk(){try{return Number(execFileSync('df',['-P','/'],{encoding:'utf8'}).trim().split('\n').pop().split(/\s+/)[4].replace('%',''))}catch{return 0}}
 let prev=os.cpus().map(c=>c.times),metrics={};
 function collect(){const now=os.cpus().map(c=>c.times),idle=now.reduce((a,c,i)=>a+c.idle-prev[i].idle,0),total=now.reduce((a,c,i)=>a+Object.values(c).reduce((x,y)=>x+y,0)-Object.values(prev[i]).reduce((x,y)=>x+y,0),0);prev=now;metrics={name:node.name,cpu:Math.round((1-idle/total)*1000)/10,ram:Math.round((1-os.freemem()/os.totalmem())*1000)/10,disk:disk(),load:os.loadavg(),uptime:Math.floor(os.uptime()),received:Date.now()}}
